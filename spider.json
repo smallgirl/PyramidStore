@@ -5,10 +5,10 @@
 			"type": 3,
 			"api": "./app/八戒影视.py"
 		}, {
-			"key": "懒懒视频",
-			"name": "懒懒视频｜APP",
+			"key": "美剧侠",
+			"name": "美剧侠｜APP",
 			"type": 3,
-			"api": "./app/懒懒视频.py"
+			"api": "./app/美剧侠.py"
 		}, {
 			"key": "欣欣影视",
 			"name": "欣欣影视｜APP",
