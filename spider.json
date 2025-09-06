@@ -199,17 +199,12 @@
 				}
 			}
 		}, {
-			"key": "山有木兮 | web",
-			"name": "山有木兮 | web",
-			"type": 3,
-			"api": "./web/山有木兮.py"
-		}, {
-			"key": "锦鲤短剧 | web",
+			"key": "锦鲤短剧",
 			"name": "锦鲤短剧 | web",
 			"type": 3,
 			"api": "./web/锦鲤短剧.py"
 		}, {
-			"key": "星之阁短剧 | api",
+			"key": "星之阁短剧",
 			"name": "星之阁短剧 | api",
 			"type": 3,
 			"api": "./web/星之阁短剧.py"
