@@ -8,17 +8,14 @@
 })
 """
 
-try:
-    from base.spider import BaseSpider
-except ImportError:
-    from t4.base.spider import BaseSpider
+from base.spider import Spider
 import re, sys, uuid, json, hashlib, urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 sys.path.append('..')
 
 
-class Spider(BaseSpider):
+class Spider(Spider):
     def __init__(self, query_params=None, t4_api=None):
         super().__init__(query_params=query_params, t4_api=t4_api)
         self.headers = {
