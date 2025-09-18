@@ -1,6 +1,5 @@
 
 from base.spider import Spider
-from Crypto.Util.Padding import unpad
 import re,sys,uuid,json,hashlib,urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
