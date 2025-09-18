@@ -9,8 +9,7 @@ class Spider(Spider):
     
     def init(self, extend=""):
         ext = json.loads(self.extend.strip())
-        hosts, appid, appkey, udid, bundlerId, source, version, versionCode = ext['host'], ext['appId'], ext['appkey'], \
-            ext['udid'], ext['bundlerId'], ext['source'], ext['version'], ext['versionCode']
+        hosts, appid, appkey, udid, bundlerId, source, version, versionCode = ext['host'], ext['appId'], ext['appkey'], ext['udid'], ext['bundlerId'], ext['source'], ext['version'], ext['versionCode']
         if not (hosts and appid and appkey and udid and bundlerId and source and version and versionCode): return
         self.headers = {
             'User-Agent': "Dart/3.1 (dart:io)",
