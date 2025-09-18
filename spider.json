@@ -190,7 +190,7 @@
 		    "quickSearch": 1,
 		    "filterable": 1,
 		    "api": "./plugin/app/AppYqk.py",
-		     "ext": {
+		    "ext": {
 		        "host": "https://gapi0320.3njzmrx1.com/config.json,https://gapi0320.lq0okex8.com/config.json,https://gapi0320.zabqs8xp.com/config.json,https://yappconfig-20250628-1318635097.cos.ap-shanghai.myqcloud.com/config.json,https://yconfig-20250628-1360051343.cos.ap-guangzhou.myqcloud.com/config.json",
 		        "appId": "d6d520ea90904f1ba680ed6c9c9f9007",
 		        "appkey": "70af67d2b6cf47679b397ea4c1886877",
@@ -202,13 +202,13 @@
 		     }
     	},{
 		    "key": "Py_juzi",
-		    "name": "橘子TV1",
+		    "name": "橘子TV2",
 		    "type": 3,
 		    "searchable": 1,
 		    "quickSearch": 1,
 		    "filterable": 1,
 		    "api": "./plugin/app/AppYqk.py",
-		     "ext": {
+		    "ext": {
 		        "host": "https://gapi0725.5p8jcjc.com/config.json,https://gapi0725.olrv5gz.com/config.json,https://gapi0725.mvljeat.com/config.json,https://jzapp-1318635097.cos.ap-shanghai.myqcloud.com/config.json,https://juzi-config-1360051343.cos.ap-shanghai.myqcloud.com/config.json",
 		        "appId": "fea23e11fc1241409682880e15fb2851",
 		        "appkey": "f384b87cc9ef41e4842dda977bae2c7f",
