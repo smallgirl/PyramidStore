@@ -8,28 +8,18 @@ sys.path.append('..')
 
 
 class Spider(Spider):
-    def __init__(self, query_params=None, t4_api=None):
-        super().__init__(query_params=query_params, t4_api=t4_api)
+    
+    def init(self, extend=""):
+        ext = json.loads(self.extend.strip())
+        hosts, appid, appkey, udid, bundlerId, source, version, versionCode = ext['host'], ext['appId'], ext['appkey'], \
+            ext['udid'], ext['bundlerId'], ext['source'], ext['version'], ext['versionCode']
+        if not (hosts and appid and appkey and udid and bundlerId and source and version and versionCode): return
         self.headers = {
             'User-Agent': "Dart/3.1 (dart:io)",
             'Accept-Encoding': "gzip",
             'content-type': "application/json; charset=utf-8"
         }
         self.nextVal = {'search': {'key': '', 'value': ''}, 'category': {}}
-        self.host = ''
-        self.appid = ''
-        self.appkey = ''
-        self.udid = ''
-        self.bundlerId = ''
-        self.source = ''
-        self.version = ''
-        self.versionCode = ''
-
-    def init(self, extend=""):
-        ext = json.loads(self.extend.strip())
-        hosts, appid, appkey, udid, bundlerId, source, version, versionCode = ext['host'], ext['appId'], ext['appkey'], \
-            ext['udid'], ext['bundlerId'], ext['source'], ext['version'], ext['versionCode']
-        if not (hosts and appid and appkey and udid and bundlerId and source and version and versionCode): return
         self.appid = appid
         self.appkey = appkey
         self.udid = udid
