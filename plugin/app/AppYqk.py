@@ -1,12 +1,4 @@
-"""
-@header({
-  searchable: 1,
-  filterable: 1,
-  quickSearch: 1,
-  title: 'AppYqk',
-  lang: 'hipy'
-})
-"""
+
 from base.spider import Spider
 from Crypto.Util.Padding import unpad
 import re,sys,uuid,json,hashlib,urllib3
