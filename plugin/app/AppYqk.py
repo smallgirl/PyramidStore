@@ -7,9 +7,9 @@
   lang: 'hipy'
 })
 """
-
 from base.spider import Spider
-import re, sys, uuid, json, hashlib, urllib3
+from Crypto.Util.Padding import unpad
+import re,sys,uuid,json,hashlib,urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 sys.path.append('..')
