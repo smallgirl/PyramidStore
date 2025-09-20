@@ -48,7 +48,12 @@ class Spider(Spider):
             headers = self.headers.copy()
             custom_ua = self.uas.get('host')
             if custom_ua: headers['User-Agent'] = custom_ua
-            host = self.fetch(host, headers=headers, verify=False, timeout=self.timeout).json()['apiDomain']
+            host_ = self.fetch(host, headers=headers, verify=False, timeout=self.timeout).text
+            try:
+                host_ = json.loads(host_)['apiDomain']
+            except json.JSONDecodeError:
+                host_ = host_.strip()
+            if host_.startswith('http'): host = host_
         self.host = host.rstrip('/')
 
     def homeContent(self, filter):
@@ -151,12 +156,10 @@ class Spider(Spider):
             if self.cms:
                 cms = self.cms
                 if '?' in cms: cms = cms.split('?')[0] + '?'
-                response = self.fetch(f'{cms}ac=detail&ids={ids[0]}', headers=headers, verify=False,
-                                      timeout=self.timeout).json()
+                response = self.fetch(f'{cms}ac=detail&ids={ids[0]}', headers=headers, verify=False, timeout=self.timeout).json()
                 video = response.get('list')[0]
             else:
-                detail_response = self.fetch(f"{self.host}/api.php/Appfox/vod?ac=detail&ids={ids[0]}", headers=headers,
-                                             verify=False, timeout=self.timeout).json()
+                detail_response = self.fetch(f"{self.host}/api.php/Appfox/vod?ac=detail&ids={ids[0]}", headers=headers, verify=False, timeout=self.timeout).json()
                 video = detail_response.get('list')[0]
         if not video: return {'list': []}
         play_from = video['vod_play_from'].split('$$$')
@@ -165,8 +168,7 @@ class Spider(Spider):
             headers = self.headers.copy()
             custom_ua = self.uas.get('config')
             if custom_ua: headers['User-Agent'] = custom_ua
-            config_response = self.fetch(f"{self.host}/api.php/Appfox/config", headers=headers, verify=False,
-                                         timeout=self.timeout).json()
+            config_response = self.fetch(f"{self.host}/api.php/Appfox/config", headers=headers, verify=False, timeout=self.timeout).json()
             player_list = config_response.get('data', {}).get('playerList', [])
             jiexi_data_list = config_response.get('data', {}).get('jiexiDataList', [])
         except Exception:
