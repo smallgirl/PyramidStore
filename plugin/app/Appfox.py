@@ -119,7 +119,9 @@ class Spider(Spider):
         custom_ua = self.uas.get('search')
         if custom_ua: headers['User-Agent'] = custom_ua
         if self.cms:
-            response = self.fetch(f'{self.cms}wd={key}', headers=headers, verify=False, timeout=self.timeout).json()
+            cms = self.cms
+            if '?' in cms: cms = cms.split('?')[0] + '?'
+            response = self.fetch(f'{cms}ac=detail&wd={key}', headers=headers, verify=False, timeout=self.timeout).json()
             self.detail = response['list']
         else:
             path = f"{self.host}/api.php/Appfox/vod?ac=detail&wd={key}"
@@ -252,68 +254,3 @@ class Spider(Spider):
 
     def localProxy(self, param):
         pass
-
-if __name__ == "__main__":
-    sp = Spider()
-    formatJo = sp.init(
-        '''
-        {
-            "host": "http://115.190.136.55:1689",
-            "cms": "http://d.tv.tkbot.fun/api.php/appfox/vod?ac=videolist",
-            "ver": 2
-        }
-        '''
-    )  # 初始化
-    # formatJo = sp.homeContent(False) # 筛选分类(首页 可选)
-    # formatJo = sp.homeVideoContent() # (首页 可选)
-    # formatJo = sp.searchContent("仙逆",False,'1') # 搜索
-    formatJo = sp.categoryContent('1', '1', False, {}) # 分类
-    # formatJo = sp.detailContent(['137']) # 详情
-    formatJo = sp.detailContent(['731'])  # 详情
-    # formatJo = sp.playerContent("","CCB@CCB-Y2FsYXJ3TjNjbEdTQlFvZlRlWFBtei9HSS8xZ01QTUQ0RkRNbWo1cTQrM2V0L29IamhkRXhOZlZ4bUxodHhDRGQrSEd2TTNlU1BrVUFPMDBrd2txTTlRL0d0eUZtMmc3aGM1blQxNlVPek9NTEZhWW9MZWxGVmphQmYyeTkxem5iUVVFelRJY04vaW1iR000bElzazVFSnNEcGUwRW1ETGpBQm04YkRCbW9Kc09aK21zc3NpVTZLSUp0VGY0Mjd4SkNOVTdLY0JxRkUyczdzNUdyNzFyZz09",{}) # 播放
-    # JL4K@JL-054dbbfe7f5dd81579e33938f6d82ac20
-    # formatJo = sp.localProxy({"":""}) # 代理
-    print(formatJo)
-# "search_from": "tianyi-14",
-
-'''
-{
-    "host": "https://yyds.m3u8.news/yyds.json",
-    "cms": "https://yyds.m3u8.news/api.php/appfox/vod?ac=detail",
-    "category": 0,
-    "ua": {
-        "host": "Dalvik/2.1.0 (Linux; U; Android 15; 24117RK2CC Build/AQ3A.240829.003)",
-        "config": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "home": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
-        "category": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "search": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-        "parse": "Mozilla/5.0 (Linux; Android 4.2.1; M040 Build/JOP40D) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.59 Mobile Safari/537.36",
-        "player": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36"
-    }
-}
-'''
-
-
-'''
-{
-    "host": "http://kumiao.yzbao.com.cn",
-    "ver": 2,
-}
-'''
-
-'''{
-	"host": "http://45.192.110.211:1513",
-	"custom_first": 1,
-	"parse": {
-		"qq|qiyi|mgtv|youku|bilibili": "https://api.qljson.xyz/api/?key=67f6a108dc6d84eaf81ac58417c1f72a&url="
-	}
-}'''
-
-'''{
-    "host": "https://cunchu8.obs.cn-north-4.myhuaweicloud.com/config.json",
-    "custom_first": 1,
-    "parse": {
-        "qiyi": "https://jx.9ia.top/api/?key=wYshfA5gHLhWzjSKr5&url=",
-        "JL4K": "http://194.147.100.155:7891/?url="
-    }
-}'''
