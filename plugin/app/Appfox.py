@@ -78,29 +78,27 @@ class Spider(Spider):
         if not self.host or self.category == 0: return None
         if self.cms and not self.category == 2: return None
         headers = self.headers.copy()
-        custom_ua = self.uas.get('homeVideo')
+        custom_ua = self.uas.get('homeVideo',self.uas.get('home'))
         if custom_ua: headers['User-Agent'] = custom_ua
         if self.ver == 2:
-            response = self.fetch(f'{self.host}/api.php/appfox/nav', headers=headers, verify=False,
-                                  timeout=self.timeout).json()
+            response = self.fetch(f'{self.host}/api.php/appfox/nav', headers=headers, verify=False, timeout=self.timeout).json()
             navigationId = ''
             for i in response['data']:
-                if isinstance(i, dict):
+                if isinstance(i,dict):
                     navigationId = i['navigationId']
                     break
             if not navigationId: return None
             path = f'nav_video?id={navigationId}'
         else:
             path = 'index'
-        response = self.fetch(f'{self.host}/api.php/Appfox/{path}', headers=headers, verify=False,
-                              timeout=self.timeout).json()
+        response = self.fetch(f'{self.host}/api.php/Appfox/{path}', headers=headers, verify=False, timeout=self.timeout).json()
         data = response['data']
         videos = []
         for i in data:
             for j in i.get('banner', []):
                 videos.append(j)
             for k in i.get('categories', []):
-                for l in k.get('videos', []):
+                for l in k.get('videos',[]):
                     videos.append(l)
         if videos and self.category == 2:
             for i in videos:
@@ -110,8 +108,8 @@ class Spider(Spider):
     def categoryContent(self, tid, pg, filter, extend):
         if not self.host: return None
         headers = self.headers.copy()
-        custom_ua = self.uas.get('category')
-        if custom_ua: headers['User-Agent'] = custom_ua
+        category_ua = self.uas.get('category')
+        if category_ua: headers['User-Agent'] = category_ua
         if self.cms and not self.category == 2:
             data =  self.fetch(f'{self.cms}pg={pg}&t={tid}', headers=headers, verify=False, timeout=self.timeout).json()
         else:
@@ -129,8 +127,8 @@ class Spider(Spider):
     def searchContent(self, key, quick, pg='1'):
         if not self.host: return None
         headers = self.headers.copy()
-        custom_ua = self.uas.get('search')
-        if custom_ua: headers['User-Agent'] = custom_ua
+        search_ua = self.uas.get('search')
+        if search_ua: headers['User-Agent'] = search_ua
         if self.cms:
             cms = self.cms
             if '?' in cms: cms = cms.split('?')[0] + '?'
@@ -145,19 +143,20 @@ class Spider(Spider):
 
     def detailContent(self, ids):
         headers = self.headers.copy()
-        search_ua = self.uas.get('search')
-        detail_ua = self.uas.get('detail')
-        if detail_ua: headers['User-Agent'] = detail_ua
-        elif search_ua: headers['User-Agent'] = search_ua
+        detail_ua = self.uas.get('detail',self.uas.get('search'))
+        if detail_ua:
+            headers['User-Agent'] = detail_ua
         video = next((i.copy() for i in self.detail if str(i['vod_id']) == str(ids[0])), None)
         if not video:
             if self.cms:
                 cms = self.cms
                 if '?' in cms: cms = cms.split('?')[0] + '?'
-                response = self.fetch(f'{cms}ac=detail&ids={ids[0]}', headers=headers, verify=False,  timeout=self.timeout).json()
+                response = self.fetch(f'{cms}ac=detail&ids={ids[0]}', headers=headers, verify=False,
+                                      timeout=self.timeout).json()
                 video = response.get('list')[0]
             else:
-                detail_response = self.fetch(f"{self.host}/api.php/Appfox/vod?ac=detail&ids={ids[0]}", headers=headers, verify=False, timeout=self.timeout).json()
+                detail_response = self.fetch(f"{self.host}/api.php/Appfox/vod?ac=detail&ids={ids[0]}", headers=headers,
+                                             verify=False, timeout=self.timeout).json()
                 video = detail_response.get('list')[0]
         if not video: return {'list': []}
         play_from = video['vod_play_from'].split('$$$')
@@ -166,7 +165,8 @@ class Spider(Spider):
             headers = self.headers.copy()
             custom_ua = self.uas.get('config')
             if custom_ua: headers['User-Agent'] = custom_ua
-            config_response = self.fetch(f"{self.host}/api.php/Appfox/config", headers=headers,verify=False, timeout=self.timeout).json()
+            config_response = self.fetch(f"{self.host}/api.php/Appfox/config", headers=headers, verify=False,
+                                         timeout=self.timeout).json()
             player_list = config_response.get('data', {}).get('playerList', [])
             jiexi_data_list = config_response.get('data', {}).get('jiexiDataList', [])
         except Exception:
