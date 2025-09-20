@@ -56,47 +56,55 @@ class Spider(Spider):
         headers = self.headers.copy()
         custom_ua = self.uas.get('home')
         if custom_ua: headers['User-Agent'] = custom_ua
-        if self.cms:
+        if self.cms and not self.category == 2:
             class_url = self.cms.rstrip('&')
             class_url = class_url.replace('&ac=videolist','').replace('ac=videolist&','').replace('ac=videolist','')
             class_url = class_url.replace('ac=detail', 'ac=list')
             classes = self.fetch(f"{class_url}", headers=headers, verify=False, timeout=self.timeout).json()['class']
             data = self.fetch(f"{self.cms.strip('&')}", headers=headers, verify=False, timeout=self.timeout).json()
             data['class'] = classes
-            return data
+            if self.category == 2:
+                for i in data.get('list',[]):
+                    i['vod_id'] = f"msearch:{i['vod_id']}"
         else:
             response = self.fetch(f'{self.host}/api.php/Appfox/init', headers=headers, verify=False, timeout=self.timeout).json()
             classes = []
             for i in response['data']['type_list']:
                 classes.append({'type_id': i['type_id'],'type_name': i['type_name']})
-            return {'class': classes}
+            data =  {'class': classes}
+        return data
 
     def homeVideoContent(self):
         if not self.host or self.category == 0: return None
-        if self.cms: return None
+        if self.cms and not self.category == 2: return None
         headers = self.headers.copy()
         custom_ua = self.uas.get('homeVideo')
         if custom_ua: headers['User-Agent'] = custom_ua
         if self.ver == 2:
-            response = self.fetch(f'{self.host}/api.php/appfox/nav', headers=headers, verify=False, timeout=self.timeout).json()
+            response = self.fetch(f'{self.host}/api.php/appfox/nav', headers=headers, verify=False,
+                                  timeout=self.timeout).json()
             navigationId = ''
             for i in response['data']:
-                if isinstance(i,dict):
+                if isinstance(i, dict):
                     navigationId = i['navigationId']
                     break
             if not navigationId: return None
             path = f'nav_video?id={navigationId}'
         else:
             path = 'index'
-        response = self.fetch(f'{self.host}/api.php/Appfox/{path}', headers=headers, verify=False, timeout=self.timeout).json()
+        response = self.fetch(f'{self.host}/api.php/Appfox/{path}', headers=headers, verify=False,
+                              timeout=self.timeout).json()
         data = response['data']
         videos = []
         for i in data:
             for j in i.get('banner', []):
                 videos.append(j)
             for k in i.get('categories', []):
-                for l in k.get('videos',[]):
+                for l in k.get('videos', []):
                     videos.append(l)
+        if videos and self.category == 2:
+            for i in videos:
+                i['vod_id'] = f"msearch:{i['vod_id']}"
         return {'list': videos}
 
     def categoryContent(self, tid, pg, filter, extend):
@@ -104,14 +112,19 @@ class Spider(Spider):
         headers = self.headers.copy()
         custom_ua = self.uas.get('category')
         if custom_ua: headers['User-Agent'] = custom_ua
-        if self.cms:
-            return self.fetch(f'{self.cms}pg={pg}&t={tid}', headers=headers, verify=False, timeout=self.timeout).json()
+        if self.cms and not self.category == 2:
+            data =  self.fetch(f'{self.cms}pg={pg}&t={tid}', headers=headers, verify=False, timeout=self.timeout).json()
         else:
             response = self.fetch(f"{self.host}/api.php/Appfox/vodList?type_id={tid}&class=全部&area=全部&lang=全部&year=全部&sort=最新&page={pg}", headers=headers, verify=False, timeout=self.timeout).json()
             videos = []
             for i in response['data']['recommend_list']:
                 videos.append(i)
-            return {'list': videos}
+            data =  {'list': videos}
+        if self.category == 2:
+            if isinstance(data, dict):
+                for i in data.get('list'):
+                    i['vod_id'] = f"msearch:{i['vod_id']}"
+        return data
 
     def searchContent(self, key, quick, pg='1'):
         if not self.host: return None
@@ -158,34 +171,26 @@ class Spider(Spider):
             jiexi_data_list = config_response.get('data', {}).get('jiexiDataList', [])
         except Exception:
             return {'list': [video]}
-
-        # 构建播放器信息映射，减少嵌套循环
         player_map = {player['playerCode']: player for player in player_list}
         processed_play_urls = []
-
-        # 处理播放来源和链接
         for idx, play_code in enumerate(play_from):
-            # 处理播放来源显示名称
             if play_code in player_map:
                 player_info = player_map[play_code]
                 if player_info['playerCode'] != player_info['playerName']:
                     play_from[idx] = f"{player_info['playerName']}\u2005({play_code})"
-
-            # 处理播放链接
-            if idx < len(play_urls):  # 避免索引越界
+            if idx < len(play_urls):
                 urls = play_urls[idx].split('#')
                 processed_urls = []
                 for url in urls:
                     parts = url.split('$')
-                    if len(parts) >= 2:  # 确保格式正确
+                    if len(parts) >= 2:
                         parts[1] = f"{play_code}@{parts[1]}"
                         processed_urls.append('$'.join(parts))
                     else:
-                        processed_urls.append(url)  # 保留原始格式异常的链接
+                        processed_urls.append(url)
                 processed_play_urls.append('#'.join(processed_urls))
-
         video['vod_play_from'] = '$$$'.join(play_from)
-        video['vod_play_url'] = '$$$'.join(processed_play_urls)  # 使用处理后的链接
+        video['vod_play_url'] = '$$$'.join(processed_play_urls)
         self.parses = {p['playerCode']: p['url'] for p in jiexi_data_list if p.get('url', '').startswith('http')}
         return {'list': [video]}
 
