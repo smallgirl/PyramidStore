@@ -15,6 +15,11 @@
 		"type": 3,
 		"api": "./app/LiteApple.py"
 	}, {
+		"key": "独播库",
+		"name": "独播库｜APP",
+		"type": 3,
+		"api": "./app/独播库.py"
+	}, {
 		"key": "欣欣影视",
 		"name": "欣欣影视｜APP",
 		"type": 3,
