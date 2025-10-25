@@ -222,6 +222,18 @@
 			"apisignkey": "lvdoutv-1.0.0"
 		}
 	}, {
+		"key": "可可影视",
+		"name": "可可影视｜APP",
+		"type": 3,
+		"api": "./app/salmon(双线).py",
+		"ext": {
+			"appid": "kkdy",
+			"channelid": "c1",
+			"versionName": "3.3.9",
+			"host": "https://vcache.nxcse.cn",
+			"package": "com.kkdyC1V251003.T090030"
+		}
+	}, {
 		"key": "酷秒至尊2.0",
 		"name": "酷秒至尊2.0｜APP",
 		"type": 3,
