@@ -235,7 +235,7 @@
 		"key": "可可影视",
 		"name": "可可影视｜APP",
 		"type": 3,
-		"api": "./app/salmon(双线).py",
+		"api": "./app/salmon双线.py",
 		"ext": {
 			"appid": "kkdy",
 			"channelid": "c1",
