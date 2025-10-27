@@ -37,7 +37,7 @@ class Spider(Spider):
 
     def homeContent(self, filter):
         if not self.host: return None
-        return {'class': [{'type_id': '电影', 'type_name': '电影'}, {'type_id': '连续剧', 'type_name': '连续剧'}, {'type_id': 1, 'type_name': '动漫'}, {'type_id': 4, 'type_name': '短剧'}, {'type_id': '纪录片', 'type_name': '纪录片'}]}
+        return {'class': [{'type_id': '电影', 'type_name': '电影'}, {'type_id': '连续剧', 'type_name': '连续剧'}, {'type_id': '动漫', 'type_name': '动漫'}, {'type_id': '短剧', 'type_name': '短剧'}, {'type_id': '纪录片', 'type_name': '纪录片'}]}
 
     def homeVideoContent(self):
         return self.categoryContent('电影,连续剧,动漫,短剧,纪录片',1,False,{})
@@ -183,3 +183,4 @@ class Spider(Spider):
 
     def localProxy(self, param):
         pass
+
