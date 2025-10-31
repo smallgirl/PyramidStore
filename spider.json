@@ -20,6 +20,23 @@
 				"iv": "0e832063ac451b27"
 			}
 		}, {
+      	  	"key": "开端｜APP",
+     	 	"name": "开端｜APP",
+      		"type": 3,
+      		"api": "./app/开端.py"
+         },{
+		      "key": "可可影视",
+		      "name": "可可影视｜APP",
+		      "type": 3,
+		      "api": "./app/salmon双线.py",
+		      "ext": {
+		        "appid": "kkdy",
+		        "channelid": "c1",
+		        "versionName": "3.3.9",
+		        "host": "https://vcache.nxcse.cn",
+		        "package": "com.kkdyC1V251003.T090030"
+		      }
+		    }, {
 			"key": "瓜萌视频",
 			"name": "瓜萌视频｜APP",
 			"type": 3,
