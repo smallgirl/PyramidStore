@@ -109,7 +109,6 @@ class Spider(Spider):
             'x-d-video': '1',
             'st': '2',
             'ts': timestamp,
-            'test': sign,
             'sign': self.hmac_sha1(sign)
         }
 
@@ -383,3 +382,4 @@ if __name__ == "__main__":
 }
 
 '''
+
